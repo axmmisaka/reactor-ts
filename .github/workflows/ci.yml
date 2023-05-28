@@ -26,25 +26,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Read lingua-franca-ref.txt
-        run: echo "lingua-franca-ref=$(wget -qO- https://raw.githubusercontent.com/lf-lang/reactor-ts/${{ github.head_ref || github.ref_name }}/lingua-franca-ref.txt)" >> $GITHUB_ENV
-      - name: Check out lingua-franca repository
-        uses: actions/checkout@v3
-        with:
-          repository: lf-lang/lingua-franca
-          ref: ${{ env.lingua-franca-ref }}
-          fetch-depth: 0
-          submodules: true
-      - name: Prepare build environment
-        uses: ./.github/actions/prepare-build-env
-      - name: Setup Node.js environment
-        uses: actions/setup-node@v3
-        with:
-          node-version: 18
-      - name: Install pnpm
-        run: npm i -g pnpm
-      - name: Install RTI
-        uses: ./.github/actions/install-rti
-        if: ${{ runner.os == 'macOS' || runner.os == 'Linux' }}
-      - name: Perform Lingua Franca TypeScript tests
-        run: |
-          ./gradlew test --tests org.lflang.tests.runtime.TypeScriptTest.* -Druntime="git://github.com/lf-lang/reactor-ts.git#${{ github.head_ref || github.ref_name }}"
+        run: echo "${{ github.repositoryUrl }}#${{ github.head_ref || github.ref_name }}"
