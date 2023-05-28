@@ -17,11 +17,14 @@ jobs:
   lingua-franca:
     runs-on: ubuntu-latest
     steps:
+      - name: Check out reactor-ts repository
+        uses: actions/checkout@v3
       - name: one
         run: |
+          ls
           echo "${{ github.event_name }}"
-          echo "${{ github.event.pull_request.head }}"
-          echo "${{ github.event.pull_request.base }}"
+          echo "${{ github.event.pull_request.head.git_url }}"
+          echo "${{ github.event.pull_request.base.git_url }}"
       - name: Perform Lingua Franca TypeScript tests
         run: |
           echo "${{ github.repositoryUrl }}#${{ github.head_ref || github.ref_name }}"
