@@ -17,6 +17,11 @@ jobs:
   lingua-franca:
     runs-on: ubuntu-latest
     steps:
+      - name: one
+        run: |
+          echo "${{ github.event_name }}"
+          echo "${{ github.event.pull_request.head }}"
+          echo "${{ github.event.pull_request.base }}"
       - name: Perform Lingua Franca TypeScript tests
         run: |
           echo "${{ github.repositoryUrl }}#${{ github.head_ref || github.ref_name }}"
