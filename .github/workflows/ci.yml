@@ -50,6 +50,8 @@ jobs:
       - name: Install RTI
         uses: ./.github/actions/install-rti
         if: ${{ runner.os == 'macOS' || runner.os == 'Linux' }}
+      - name: Setup tmate session
+        uses: mxschmitt/action-tmate@v3
       - name: Perform Lingua Franca TypeScript tests
         run: |
           ./gradlew test --tests org.lflang.tests.runtime.TypeScriptTest.* -Druntime="file://${{ github.workspace }}/reactor-ts"
