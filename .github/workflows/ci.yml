@@ -41,7 +41,7 @@ jobs:
           path: "lingua-franca"
           submodules: true
       - name: cd
-        run: cd lingua-fanca
+        run: cd lingua-franca
       - name: Prepare build environment
         uses: ./.github/actions/prepare-build-env
       - name: Setup Node.js environment
