@@ -41,7 +41,7 @@ jobs:
           path: "lingua-franca"
           submodules: true
       - name: Move Lingua Franca to default pwd
-        run: >
+        run: |
           shopt -s dotglob
           mv -- ./lingua-franca/* ${{ github.workspace }}
           shopt -u dotglob 
