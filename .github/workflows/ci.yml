@@ -28,7 +28,7 @@ jobs:
       - name: Check out reactor-ts repository version 1
         uses: actions/checkout@v3
         with: 
-          path: "reactor-ts-ext"
+          path: "reactor-ts"
           fetch-depth: 0
       - name: Read lingua-franca-ref.txt
         run: echo "lingua-franca-ref=$(cat ./reactor-ts/lingua-franca-ref.txt)" >> $GITHUB_ENV
@@ -40,8 +40,8 @@ jobs:
           fetch-depth: 0
           path: "lingua-franca"
           submodules: true
-      - name: cd
-        run: cd lingua-franca
+      - name: Move Lingua Franca to default pwd
+        run: mv ./lingua-franca/* ${{ github.workspace }}
       - name: Prepare build environment
         uses: ./.github/actions/prepare-build-env
       - name: Setup Node.js environment
@@ -56,7 +56,6 @@ jobs:
       - name: Setup tmate session
         uses: mxschmitt/action-tmate@v3
       - name: Perform Lingua Franca TypeScript tests
-        working-directory: ./lingua-franca
         run: |
           echo './gradlew test --tests org.lflang.tests.runtime.TypeScriptTest.* -Druntime="file://${{ github.workspace }}/reactor-ts"'
           ./gradlew --dry-run test --tests org.lflang.tests.runtime.TypeScriptTest.* -Druntime="file://${{ github.workspace }}/reactor-ts"
