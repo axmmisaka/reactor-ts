@@ -40,8 +40,10 @@ jobs:
           fetch-depth: 0
           path: "lingua-franca"
           submodules: true
+      - name: cd
+        run: cd lingua-fanca
       - name: Prepare build environment
-        uses: ./lingua-franca/.github/actions/prepare-build-env
+        uses: ./.github/actions/prepare-build-env
       - name: Setup Node.js environment
         uses: actions/setup-node@v3
         with:
@@ -49,7 +51,7 @@ jobs:
       - name: Install pnpm
         run: npm i -g pnpm
       - name: Install RTI
-        uses: ./lingua-franca/.github/actions/install-rti
+        uses: ./.github/actions/install-rti
         if: ${{ runner.os == 'macOS' || runner.os == 'Linux' }}
       - name: Setup tmate session
         uses: mxschmitt/action-tmate@v3
