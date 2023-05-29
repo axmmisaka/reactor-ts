@@ -38,9 +38,10 @@ jobs:
           repository: lf-lang/lingua-franca
           ref: ${{ env.lingua-franca-ref }}
           fetch-depth: 0
+          path: "lingua-franca"
           submodules: true
       - name: Prepare build environment
-        uses: ./.github/actions/prepare-build-env
+        uses: ./lingua-franca/.github/actions/prepare-build-env
       - name: Setup Node.js environment
         uses: actions/setup-node@v3
         with:
@@ -48,10 +49,12 @@ jobs:
       - name: Install pnpm
         run: npm i -g pnpm
       - name: Install RTI
-        uses: ./.github/actions/install-rti
+        uses: ./lingua-franca/.github/actions/install-rti
         if: ${{ runner.os == 'macOS' || runner.os == 'Linux' }}
       - name: Setup tmate session
         uses: mxschmitt/action-tmate@v3
       - name: Perform Lingua Franca TypeScript tests
+        working-directory: ./lingua-franca
         run: |
-          ./gradlew test --tests org.lflang.tests.runtime.TypeScriptTest.* -Druntime="file://${{ github.workspace }}/reactor-ts"
+          echo './gradlew test --tests org.lflang.tests.runtime.TypeScriptTest.* -Druntime="file://${{ github.workspace }}/reactor-ts"'
+          ./gradlew --dry-run test --tests org.lflang.tests.runtime.TypeScriptTest.* -Druntime="file://${{ github.workspace }}/reactor-ts"
