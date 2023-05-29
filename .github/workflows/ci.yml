@@ -41,7 +41,7 @@ jobs:
           path: "lingua-franca"
           submodules: true
       - name: Move Lingua Franca to default pwd
-        run: mv ./lingua-franca/* ${{ github.workspace }}
+        run: mv ./lingua-franca/* ./lingua-franca/.* ${{ github.workspace }}
       - name: Prepare build environment
         uses: ./.github/actions/prepare-build-env
       - name: Setup Node.js environment
