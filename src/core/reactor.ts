@@ -408,7 +408,7 @@ export abstract class Reactor extends Component {
     // console.log("Marking for deletion: " + this._getFullyQualifiedName())
     this._runtime.delete(this);
     this.shutdown.update(
-      new TaggedEvent(this.shutdown, this.util.getCurrentTag(), null)
+      new TaggedEvent(this.shutdown, this.util.getCurrentTag(), {} satisfies Record<string, never>)
     );
     // this._findOwnReactors().forEach(r => r._delete())
   }
@@ -2351,7 +2351,7 @@ export class App extends Reactor {
                 new TaggedEvent(
                   trigger,
                   this._currentTag.getLaterTag(trigger.period),
-                  null
+                  {} satisfies Record<string, never> as Present
                 )
               );
             }
@@ -2503,7 +2503,7 @@ export class App extends Reactor {
         () => `Setting end of execution to: ${this._endOfExecution}`
       );
 
-      this.schedulable(this.shutdown).schedule(0, null);
+      this.schedulable(this.shutdown).schedule(0, {} satisfies Record<string, never>);
     } else {
       Log.global.debug(
         "Ignoring App._shutdown() call after shutdown has already started."
@@ -2517,7 +2517,7 @@ export class App extends Reactor {
   protected _setEndOfExecution(stopTag: Tag): void {
     this._endOfExecution = stopTag;
     this.__runtime.schedule(
-      new TaggedEvent(this.shutdown, this._endOfExecution, null)
+      new TaggedEvent(this.shutdown, this._endOfExecution, {} satisfies Record<string, never>)
     );
   }
 
@@ -2671,7 +2671,7 @@ export class App extends Reactor {
 
       // If there is a known end of execution, schedule a shutdown reaction to that effect.
       this.__runtime.schedule(
-        new TaggedEvent(this.shutdown, this._endOfExecution, null)
+        new TaggedEvent(this.shutdown, this._endOfExecution, {} satisfies Record<string, never>)
       );
     }
   }

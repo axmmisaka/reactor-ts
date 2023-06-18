@@ -20,7 +20,7 @@ export type ReactorClass<T extends Reactor, S> = new (
  * Type that describes a tuple of arguments passed into the constructor
  * of a reactor class.
  */
-export type ReactorArgs<T> = T extends any[] ? T : never;
+export type ReactorArgs<T> = T extends unknown[] ? T : never;
 
 /**
  * A bank of reactor instances.

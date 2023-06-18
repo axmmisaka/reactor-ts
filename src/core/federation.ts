@@ -309,10 +309,8 @@ class RTIClient extends EventEmitter {
    * meaning that the type checker cannot check whether uses of the action are type safe.
    * In an alternative design, type information might be preserved. TODO(marten): Look into this.
    */
-  private readonly federatePortActionByID: Map<number, Action<any>> = new Map<
-    number,
-    Action<any>
-  >();
+  private readonly federatePortActionByID = new Map<number, Action<any>>();
+  public test = new Array<Action<Present>>();
 
   /**
    * Establish the mapping between a federate port's action and its ID.
@@ -323,6 +321,7 @@ class RTIClient extends EventEmitter {
     federatePortID: number,
     federatePortAction: Action<T>
   ): void {
+    this.test.push(federatePortAction);
     this.federatePortActionByID.set(federatePortID, federatePortAction);
   }
 
@@ -1292,7 +1291,7 @@ export class FederatedApp extends App {
       // reactions.
     }
     const trigger = this.outputControlReactionTriggers[0];
-    const event = new TaggedEvent(trigger, this.util.getCurrentTag(), null);
+    const event = new TaggedEvent(trigger, this.util.getCurrentTag(), {} satisfies Record<string, never>);
     Log.debug(this, () => {
       return "Inserting network output control reaction on reaction queue.";
     });

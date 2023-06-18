@@ -77,7 +77,7 @@ export type Absent = undefined;
  */
 export type ArgList<T> = T extends Variable[] ? T : never;
 
-export type ParmList<T> = T extends any[] ? T : never;
+export type ParmList<T> = T extends unknown[] ? T : never;
 
 /**
  * Type for data exchanged between ports.
@@ -89,7 +89,8 @@ export type Present =
   | boolean
   | symbol
   | object
-  | null;
+  // Empty TS Object. This denotes Present with no payload.
+  | Record<string, never>;
 
 export class Args<T extends Variable[]> {
   tuple: T;
