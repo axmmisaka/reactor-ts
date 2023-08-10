@@ -10,6 +10,6 @@ updates:
     schedule:
       interval: "weekly"
     groups:
-      - "All dependencies"
+      all-dependencies:
         patterns:
           - "*"
