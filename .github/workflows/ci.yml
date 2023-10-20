@@ -38,7 +38,7 @@ jobs:
       - name: Check out lingua-franca repository
         uses: actions/checkout@v3
         with:
-          repository: lf-lang/lingua-franca
+          repository: axmmisaka/lingua-franca
           ref: ${{ env.lingua-franca-ref }}
           fetch-depth: 0
           path: "lingua-franca"
@@ -62,10 +62,12 @@ jobs:
         run: npm i -g pnpm
       - name: Install RTI
         uses: ./.github/actions/install-rti
+        with:
+          lingua-franca-dir: lingua-franca
         if: ${{ runner.os == 'macOS' || runner.os == 'Linux' }}
       - name: Perform Lingua Franca TypeScript tests
         run: |
-          ./gradlew targetTest -Ptarget=TypeScript -Druntime="file:/${{ github.workspace }}/reactor-ts"
+          ./lingua-franca/gradlew -p "lingua-franca" targetTest -Ptarget=TypeScript -Druntime="file:/${{ github.workspace }}/reactor-ts"
 
   lint:
     runs-on: ubuntu-latest
