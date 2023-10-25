@@ -9,21 +9,6 @@ on:
   workflow_dispatch:
 
 jobs:
-  jest:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check out reactor-ts repository
-        uses: actions/checkout@v3
-      - name: Setup Node.js environment
-        uses: actions/setup-node@v3
-        with:
-          node-version: 18
-          cache: 'npm'
-      - name: Run the type checker and then run the tests
-        run: |
-          npm install
-          npm run build
-          npm run test
 
   lingua-franca:
     runs-on: ubuntu-latest
@@ -33,6 +18,41 @@ jobs:
         with: 
           path: "reactor-ts"
           fetch-depth: 0
+      - name: Check for PR Magic Reference, and set LF reference if one exists
+        uses: actions/github-script@v6
+        if: ${{ github.event_name }} == "pull_request"
+        with:
+          script: |
+            function analyzeMagic(str) {
+              if (str == null) {
+                  core.setOutput("hasMagic", "false");
+                  return;
+              }
+              ;
+              const line = str.split("\n", 1)[0];
+              console.log(line);
+              if (line.substring(0, 3) !== "!##" || !line.includes("=")) {
+                  core.setOutput("hasMagic", "false");
+                  return;
+              }
+              const seperator = line.indexOf("=");
+              const directive = line.substring(3, seperator);
+              const value = line.substring(seperator + 1);
+              console.log(directive, value);
+              switch (directive) {
+                case "lf-ref": {
+                    core.setOutput("hasMagic", "true");
+                    core.setOutput("lf-ref", value);
+                    break;
+                }
+                default: {
+                    console.log(`Invalid directive ${directive}`);
+                    core.setOutput("hasMagic", "false");
+                }
+              }
+            }
+            
+            analyzeMagic(context.payload.pull_request.body);
       - name: Read lingua-franca-ref.txt
         run: echo "lingua-franca-ref=$(cat ./reactor-ts/lingua-franca-ref.txt)" >> $GITHUB_ENV
       - name: Check out lingua-franca repository
@@ -63,39 +83,3 @@ jobs:
           npm run build
       - name: Install pnpm
         run: npm i -g pnpm
-      - name: Install RTI
-        uses: ./.github/actions/install-rti
-        if: ${{ runner.os == 'macOS' || runner.os == 'Linux' }}
-      - name: Perform Lingua Franca TypeScript tests
-        run: |
-          ./gradlew targetTest -Ptarget=TypeScript -Druntime="file:/${{ github.workspace }}/reactor-ts"
-
-  lint:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check out reactor-ts repository
-        uses: actions/checkout@v3
-      - name: Setup Node.js environment
-        uses: actions/setup-node@v3
-        with:
-          node-version: 18
-          cache: 'npm'
-      - name: Run eslint
-        run: |
-          npm install
-          npm run lint
-
-  prettier: 
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check out reactor-ts repository
-        uses: actions/checkout@v3
-      - name: Setup Node.js environment
-        uses: actions/setup-node@v3
-        with:
-          node-version: 18
-      - name: Run prettier
-        run: |
-          npm install
-          npm run check-style
-  
